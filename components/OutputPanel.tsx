@@ -1,89 +1,52 @@
-import React, { useState } from 'react';
-import { SynapseData } from '../types';
-import DashboardView from './DashboardView';
-import { Code, LayoutDashboard } from 'lucide-react';
+import React from 'react';
+import { ChatMessage } from '../types';
+import ChatView from './DashboardView';
+import { Sparkles, Terminal } from 'lucide-react';
 
 interface OutputPanelProps {
-  data: SynapseData | null;
+  messages: ChatMessage[];
   isLoading: boolean;
   error: string | null;
 }
 
-const OutputPanel: React.FC<OutputPanelProps> = ({ data, isLoading, error }) => {
-  const [activeTab, setActiveTab] = useState<'visual' | 'json'>('visual');
-
-  if (isLoading) {
+const OutputPanel: React.FC<OutputPanelProps> = ({ messages, isLoading, error }) => {
+  
+  // Empty State
+  if (messages.length === 0 && !isLoading) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-4 animate-pulse">
-        <div className="w-16 h-16 bg-slate-200 rounded-full"></div>
-        <div className="h-4 bg-slate-200 rounded w-48"></div>
-        <div className="h-4 bg-slate-200 rounded w-32"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="h-full flex flex-col items-center justify-center text-red-500 p-8 text-center">
-        <div className="p-4 bg-red-50 rounded-full mb-4">
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      <div className="h-full flex flex-col items-center justify-center bg-gray-50/50 text-center p-8">
+        <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center mb-8 relative">
+           <div className="absolute inset-0 bg-accent/5 rounded-2xl transform rotate-6"></div>
+           <Terminal className="w-10 h-10 text-gray-300 relative z-10" />
         </div>
-        <h3 className="text-lg font-bold mb-2">Analysis Failed</h3>
-        <p className="text-slate-600">{error}</p>
-      </div>
-    );
-  }
-
-  if (!data) {
-    return (
-      <div className="h-full flex flex-col items-center justify-center text-slate-400 p-12 text-center opacity-60">
-        <LayoutDashboard className="w-20 h-20 mb-6 text-slate-200" />
-        <h3 className="text-lg font-semibold text-slate-600 mb-2">Ready to Organize</h3>
-        <p className="max-w-xs mx-auto">Paste your notes on the left and click "Organize" to generate your second brain dashboard.</p>
+        <h3 className="text-xl font-serif font-bold text-gray-900 mb-3">Gemini Workspace</h3>
+        <p className="max-w-md mx-auto text-gray-500 text-sm leading-relaxed mb-8">
+          I am ready to assist with coding, network design, writing, and analysis. 
+          Upload images or files for multimodal insights.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg w-full">
+           <div className="p-4 bg-white border border-gray-100 rounded-lg shadow-sm text-left">
+              <span className="text-accent font-bold text-xs uppercase block mb-1">Code</span>
+              <p className="text-xs text-gray-600">"Debug this React component..."</p>
+           </div>
+           <div className="p-4 bg-white border border-gray-100 rounded-lg shadow-sm text-left">
+              <span className="text-blue-500 font-bold text-xs uppercase block mb-1">Write</span>
+              <p className="text-xs text-gray-600">"Draft a Q3 strategy memo..."</p>
+           </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full bg-slate-50/50">
-      {/* Tab Navigation */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white sticky top-0 z-10">
-        <h2 className="font-bold text-slate-800">Results</h2>
-        <div className="flex bg-slate-100 p-1 rounded-lg">
-          <button
-            onClick={() => setActiveTab('visual')}
-            className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-              activeTab === 'visual' 
-                ? 'bg-white text-indigo-600 shadow-sm' 
-                : 'text-slate-500 hover:text-slate-700'
-            }`}
-          >
-            <LayoutDashboard className="w-3 h-3" />
-            <span>Dashboard</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('json')}
-            className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
-              activeTab === 'json' 
-                ? 'bg-white text-indigo-600 shadow-sm' 
-                : 'text-slate-500 hover:text-slate-700'
-            }`}
-          >
-            <Code className="w-3 h-3" />
-            <span>Raw JSON</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Content Area */}
-      <div className="flex-1 overflow-auto p-6 scroll-smooth">
-        {activeTab === 'visual' ? (
-          <DashboardView data={data} />
-        ) : (
-          <div className="bg-slate-900 rounded-xl shadow-inner p-6 overflow-x-auto border border-slate-800">
-            <pre className="text-emerald-400 font-mono text-sm leading-relaxed">
-              {JSON.stringify(data, null, 2)}
-            </pre>
+    <div className="flex flex-col h-full bg-gray-50/30 relative">
+      {/* Scrollable Area */}
+      <div className="flex-1 overflow-y-auto pt-8 pb-12 px-4 md:px-12 scroll-smooth">
+        <ChatView messages={messages} isLoading={isLoading} />
+        
+        {error && (
+          <div className="max-w-4xl mx-auto mt-4 p-4 bg-red-50 text-red-700 rounded-lg border border-red-100 text-sm flex items-center gap-2">
+             <span>⚠️</span> {error}
           </div>
         )}
       </div>

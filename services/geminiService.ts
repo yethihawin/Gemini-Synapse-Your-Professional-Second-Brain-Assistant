@@ -1,140 +1,102 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { SynapseData } from "../types";
+import { GoogleGenAI, Chat } from "@google/genai";
+import { Attachment } from "../types";
 
 // Initialize Gemini Client
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-// Define the Schema for Structured Output
-const synapseSchema = {
-  type: Type.OBJECT,
-  properties: {
-    projects: {
-      type: Type.ARRAY,
-      items: {
-        type: Type.OBJECT,
-        properties: {
-          name: { type: Type.STRING },
-          status: { type: Type.STRING, enum: ['On Track', 'At Risk', 'Completed', 'Pending'] },
-          description: { type: Type.STRING },
-          deadline: { type: Type.STRING },
-        },
-        required: ['name', 'status', 'description'],
-      },
+const SYSTEM_INSTRUCTION = `
+You are Gemini Synapse, a High-Performance Universal AI Workspace. 
+Your goal is to act as a world-class expert across multiple domains, producing detailed, high-quality "Artifacts" as outputs.
+
+**CORE EXPERT ROLES:**
+
+1.  **Coding Assistant:** 
+    *   Write clean, efficient, bug-free, and well-documented code.
+    *   Debug complex issues with step-by-step reasoning.
+    *   Provide architectural patterns and best practices.
+    *   ALWAYS use markdown code blocks with language identifiers (e.g., \`\`\`typescript).
+
+2.  **Network Designer:**
+    *   Design secure, scalable IT and Cloud network architectures (AWS/Azure/GCP).
+    *   Explain protocols, subnets, and security groups clearly.
+    *   Use ASCII diagrams or structured lists to visualize topology.
+
+3.  **Versatile Drafter (Professional Writing):**
+    *   Draft emails, reports, essays, and creative content with perfect tone and grammar.
+    *   Edit text for clarity, conciseness, and impact.
+    *   Format outputs beautifully using Markdown headers, bullet points, and blockquotes.
+
+4.  **Weather Expert & Data Analyst:**
+    *   Analyze weather patterns and provide advice based on data (simulated).
+    *   Visualize data trends using Markdown tables.
+
+5.  **Travel & Health Guide (Legacy Support):**
+    *   Continue to provide detailed itineraries and wellness plans if requested.
+
+**OPERATIONAL GUIDELINES:**
+
+*   **Format as Artifacts:** Your responses should look like professional documents. Use H1/H2 headers, clear separators, and rich formatting.
+*   **Safety First:** Strictly avoid generating hate speech, dangerous instructions, sexually explicit content, or harassment. If a user request is unsafe, politely decline and pivot to a safe topic.
+*   **Context Awareness:** Remember previous details in the conversation.
+*   **Multimodal Analysis:** If an image or file is provided, analyze it deeply before answering.
+
+**RESPONSE STYLE:**
+*   Be direct and professional.
+*   Do not fluff. Get straight to the solution or content.
+*   Use "Confidence: High/Medium/Low" only if uncertain about facts.
+`;
+
+let chatSession: Chat | null = null;
+
+export const startChatSession = () => {
+  chatSession = ai.chats.create({
+    model: 'gemini-3-flash-preview',
+    config: {
+      systemInstruction: SYSTEM_INSTRUCTION,
+      thinkingConfig: { thinkingBudget: 0 } // Optimized for speed/interactive chat
     },
-    people: {
-      type: Type.ARRAY,
-      items: {
-        type: Type.OBJECT,
-        properties: {
-          name: { type: Type.STRING },
-          role: { type: Type.STRING },
-          keyContribution: { type: Type.STRING },
-        },
-        required: ['name', 'role'],
-      },
-    },
-    decisions: {
-      type: Type.ARRAY,
-      items: {
-        type: Type.OBJECT,
-        properties: {
-          summary: { type: Type.STRING },
-          impact: { type: Type.STRING, enum: ['High', 'Medium', 'Low'] },
-          dateMade: { type: Type.STRING },
-        },
-        required: ['summary', 'impact'],
-      },
-    },
-    tasks: {
-      type: Type.ARRAY,
-      items: {
-        type: Type.OBJECT,
-        properties: {
-          description: { type: Type.STRING },
-          assignee: { type: Type.STRING },
-          priority: { type: Type.STRING, enum: ['High', 'Medium', 'Low'] },
-          dueDate: { type: Type.STRING },
-        },
-        required: ['description', 'assignee', 'priority'],
-      },
-    },
-  },
-  required: ['projects', 'people', 'decisions', 'tasks'],
+  });
+  return chatSession;
 };
 
-export const organizeContent = async (text: string): Promise<SynapseData> => {
-  if (!text.trim()) {
-    throw new Error("Please provide some text notes to organize.");
+export const sendMessage = async (text: string, attachments: Attachment[] = []): Promise<string> => {
+  if (!chatSession) {
+    startChatSession();
   }
 
   try {
-    const prompt = `Analyze the following unstructured notes and organize them into a structured second-brain format. 
-    Extract relevant projects, people involved, key decisions made, and actionable tasks.
-    
-    NOTES:
-    ${text}`;
+    const parts: any[] = [];
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: prompt,
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: synapseSchema,
-        thinkingConfig: { thinkingBudget: 0 } // Flash model optimization
-      },
+    // Add Attachments (Images/Files)
+    if (attachments.length > 0) {
+      attachments.forEach(att => {
+        // Strip base64 prefix if present (e.g., "data:image/png;base64,")
+        const cleanData = att.data.includes('base64,') 
+          ? att.data.split('base64,')[1] 
+          : att.data;
+
+        parts.push({
+          inlineData: {
+            mimeType: att.mimeType,
+            data: cleanData
+          }
+        });
+      });
+    }
+
+    // Add Text Prompt
+    if (text.trim()) {
+      parts.push({ text });
+    }
+
+    const response = await chatSession!.sendMessage({
+      message: parts 
     });
 
-    if (!response.text) {
-      // Handle edge cases where the model refuses to generate text (e.g., safety blocks)
-      const candidate = response.candidates?.[0];
-      if (candidate?.finishReason && candidate.finishReason !== "STOP") {
-        throw new Error(`The AI could not process the content due to: ${candidate.finishReason}`);
-      }
-      throw new Error("The AI returned an empty response. Please try again with different content.");
-    }
-
-    try {
-      const data: SynapseData = JSON.parse(response.text);
-      return data;
-    } catch (parseError) {
-      console.error("JSON Parse Error:", parseError, "Raw Response:", response.text);
-      throw new Error("Failed to process the AI response structure. Please try again.");
-    }
+    return response.text || "I processed your request but could not generate a text response.";
 
   } catch (error: any) {
-    console.error("Gemini Service Error:", error);
-
-    // If we've already thrown a specific error above, rethrow it
-    if (error.message && (
-        error.message.startsWith("The AI could") || 
-        error.message.startsWith("The AI returned") ||
-        error.message.startsWith("Failed to process") ||
-        error.message.startsWith("Please provide")
-    )) {
-      throw error;
-    }
-
-    const errorMsg = error.message?.toLowerCase() || "";
-    const errorString = error.toString().toLowerCase();
-
-    // Map common Gemini/Network errors to user-friendly messages
-    if (errorMsg.includes("api key") || errorMsg.includes("403") || errorMsg.includes("401") || errorMsg.includes("unauthenticated")) {
-      throw new Error("Authentication failed. Please verify your API key.");
-    }
-
-    if (errorMsg.includes("quota") || errorMsg.includes("429") || errorString.includes("resource exhausted")) {
-      throw new Error("API usage limit exceeded. Please wait a moment and try again.");
-    }
-
-    if (errorMsg.includes("503") || errorMsg.includes("overloaded") || errorMsg.includes("unavailable")) {
-      throw new Error("The AI service is temporarily overloaded. Please try again in a few seconds.");
-    }
-
-    if (errorMsg.includes("fetch failed") || errorMsg.includes("network")) {
-      throw new Error("Network error. Please check your internet connection.");
-    }
-
-    // Default generic error
-    throw new Error(error.message || "An unexpected error occurred while processing your request.");
+    console.error("Gemini Chat Error:", error);
+    throw new Error(error.message || "An unexpected error occurred during the conversation.");
   }
 };

@@ -5,25 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gemini Synapse</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Merriweather', 'serif'],
+            },
+            colors: {
+              surface: '#F9FAFB',
+              paper: '#FFFFFF',
+              primary: '#1F2937', 
+              accent: '#EA580C', 
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+            },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
     <style>
       body {
         font-family: 'Inter', sans-serif;
+        background-color: #F9FAFB;
+        color: #1F2937;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
-      /* Custom scrollbar for better aesthetics */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+      
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
+
+      /* Markdown Artifact Styling */
+      .markdown-prose { color: #374151; line-height: 1.7; font-size: 0.95rem; }
+      .markdown-prose h1, .markdown-prose h2, .markdown-prose h3 { color: #111827; font-family: 'Merriweather', serif; margin-top: 1.5em; margin-bottom: 0.6em; }
+      .markdown-prose h1 { font-size: 1.6rem; font-weight: 700; border-bottom: 1px solid #E5E7EB; padding-bottom: 0.5rem; }
+      .markdown-prose h2 { font-size: 1.3rem; font-weight: 600; }
+      .markdown-prose h3 { font-size: 1.1rem; font-weight: 600; }
+      .markdown-prose p { margin-bottom: 1em; }
+      .markdown-prose ul { list-style-type: disc; padding-left: 1.25em; margin-bottom: 1em; }
+      .markdown-prose ol { list-style-type: decimal; padding-left: 1.25em; margin-bottom: 1em; }
+      .markdown-prose strong { color: #000; font-weight: 600; }
+      .markdown-prose blockquote { border-left: 3px solid #EA580C; padding-left: 1rem; color: #4B5563; font-style: italic; background: #FFF7ED; padding: 0.8rem; margin: 1em 0; border-radius: 4px; }
+      
+      /* Code Blocks */
+      .markdown-prose pre { 
+        background-color: #1a1a1a; 
+        color: #e5e5e5; 
+        padding: 1rem; 
+        border-radius: 0.5rem; 
+        overflow-x: auto; 
+        margin-bottom: 1.5em; 
+        font-family: monospace;
+        font-size: 0.85rem;
+        border: 1px solid #333;
       }
-      ::-webkit-scrollbar-track {
-        background: #f1f5f9; 
+      .markdown-prose code { 
+        background-color: #F3F4F6; 
+        color: #BE185D; 
+        padding: 0.2rem 0.4rem; 
+        border-radius: 0.25rem; 
+        font-size: 0.85em; 
+        font-family: monospace;
       }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1; 
-        border-radius: 4px;
+      .markdown-prose pre code { 
+        background-color: transparent; 
+        color: inherit; 
+        padding: 0;
       }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8; 
+
+      /* Tables */
+      .markdown-prose table { width: 100%; border-collapse: collapse; margin-bottom: 1.5em; border: 1px solid #E5E7EB; }
+      .markdown-prose th { background-color: #F9FAFB; padding: 0.75rem; text-align: left; border-bottom: 1px solid #E5E7EB; font-weight: 600; }
+      .markdown-prose td { padding: 0.75rem; border-bottom: 1px solid #E5E7EB; vertical-align: top; }
+      
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
       }
     </style>
   <script type="importmap">
@@ -33,14 +105,16 @@
     "react/": "https://esm.sh/react@^19.2.4/",
     "react": "https://esm.sh/react@^19.2.4",
     "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-    "@google/genai": "https://esm.sh/@google/genai@^1.40.0"
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
+    "react-markdown": "https://esm.sh/react-markdown@9",
+    "remark-gfm": "https://esm.sh/remark-gfm@4"
   }
 }
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-slate-50 text-slate-900 antialiased">
-    <div id="root"></div>
+  <body class="bg-surface text-gray-800 antialiased h-screen overflow-hidden">
+    <div id="root" class="h-full"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
 </html>
