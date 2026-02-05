@@ -1,20 +1,21 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Gemini Synapse: Your Professional Second Brain Assistant
 
-# Run and deploy your AI Studio app
+Gemini Synapse is a high-performance AI Workspace built for the Gemini 3 global hackathon. It combines multimodal intelligence with domain-specific AI agents to help you organize your life, work, and studies.
 
-This contains everything you need to run your app locally.
+## 🚀 Key Features
+- **Multimodal Insights:** Analyze images, network diagrams, and documents (PDFs) instantly.
+- **Expert AI Agents:** Specialized assistants for Coding, Network Design, Business Strategy, Travel Planning, Health, and Study Schedules.
+- **Intelligent Organizer:** Automatically extracts actionable tasks, decisions, and insights from messy notes.
+- **Claude-inspired UI:** A clean, professional workspace featuring "Rich Artifacts" (formatted reports, tables, and code blocks).
+- **Large Context Support:** Maintains context over long conversations for deep analysis.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1Jx7LsyQiiZjyPJo3tOkOiR4W2OgzzurY
+## 🛠 Tech Stack
+- **AI Model:** Google Gemini 3 API
+- **Frontend:** React.js, TypeScript
+- **Styling:** Tailwind CSS
+- **Development Environment:** Google AI Studio
 
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 💻 Run Locally
+1. Install dependencies: `npm install`
+2. Set your `GEMINI_API_KEY` in `.env.local`
+3. Start development server: `npm run dev`
