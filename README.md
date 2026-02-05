@@ -24,7 +24,7 @@ Gemini Synapse is a high-performance AI Workspace built for the Gemini 3 global 
 ## 📖 Run and deploy your AI Studio app
 This repository contains everything you need to run your app locally and explore its features.
 
-**View your app in AI Studio:** [Open in AI Studio](https://ai.studio/apps/drive/1Jx7LsyQiiZjyPJo3tOkOiR4W2OgzzerY)
+**View your app in AI Studio:** [Open in AI Studio][(https://ai.studio/apps/drive/1Jx7LsyQiiZjyPJo3tOkOiR4W2OgzzurY)]
 
 ### Run Locally
 **Prerequisites:** Node.js
