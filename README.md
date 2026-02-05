@@ -1,6 +1,10 @@
 # Gemini Synapse: Your Professional Second Brain Assistant
 
+![Google AI Studio Banner](https://raw.githubusercontent.com/google-gemini/ai-studio-samples/main/assets/banner.png)
+
 Gemini Synapse is a high-performance AI Workspace built for the Gemini 3 global hackathon. It combines multimodal intelligence with domain-specific AI agents to help you organize your life, work, and studies.
+
+---
 
 ## 🚀 Key Features
 - **Multimodal Insights:** Analyze images, network diagrams, and documents (PDFs) instantly.
@@ -15,7 +19,16 @@ Gemini Synapse is a high-performance AI Workspace built for the Gemini 3 global 
 - **Styling:** Tailwind CSS
 - **Development Environment:** Google AI Studio
 
-## 💻 Run Locally
-1. Install dependencies: `npm install`
-2. Set your `GEMINI_API_KEY` in `.env.local`
-3. Start development server: `npm run dev`
+---
+
+## 📖 Run and deploy your AI Studio app
+This repository contains everything you need to run your app locally and explore its features.
+
+**View your app in AI Studio:** [Open in AI Studio](https://ai.studio/apps/drive/1Jx7LsyQiiZjyPJo3tOkOiR4W2OgzzerY)
+
+### Run Locally
+**Prerequisites:** Node.js
+
+1. **Install dependencies:**
+   ```bash
+   npm install
