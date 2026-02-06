@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gemini Synapse</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -15,10 +15,10 @@
               serif: ['Merriweather', 'serif'],
             },
             colors: {
-              surface: '#F9FAFB',
+              surface: '#FFFDF5', /* Ivory Surface */
               paper: '#FFFFFF',
               primary: '#1F2937', 
-              accent: '#EA580C', 
+              accent: '#3730A3', /* Indigo Accent */
             },
             animation: {
               'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
@@ -36,59 +36,93 @@
     <style>
       body {
         font-family: 'Inter', sans-serif;
-        background-color: #F9FAFB;
+        background-color: #FFFDF5;
         color: #1F2937;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
       
-      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
       ::-webkit-scrollbar-track { background: transparent; }
-      ::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 3px; }
-      ::-webkit-scrollbar-thumb:hover { background: #D1D5DB; }
+      ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; border: 2px solid #FFFDF5; }
+      ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
 
-      /* Markdown Artifact Styling */
-      .markdown-prose { color: #374151; line-height: 1.7; font-size: 0.95rem; }
-      .markdown-prose h1, .markdown-prose h2, .markdown-prose h3 { color: #111827; font-family: 'Merriweather', serif; margin-top: 1.5em; margin-bottom: 0.6em; }
-      .markdown-prose h1 { font-size: 1.6rem; font-weight: 700; border-bottom: 1px solid #E5E7EB; padding-bottom: 0.5rem; }
-      .markdown-prose h2 { font-size: 1.3rem; font-weight: 600; }
-      .markdown-prose h3 { font-size: 1.1rem; font-weight: 600; }
-      .markdown-prose p { margin-bottom: 1em; }
-      .markdown-prose ul { list-style-type: disc; padding-left: 1.25em; margin-bottom: 1em; }
-      .markdown-prose ol { list-style-type: decimal; padding-left: 1.25em; margin-bottom: 1em; }
-      .markdown-prose strong { color: #000; font-weight: 600; }
-      .markdown-prose blockquote { border-left: 3px solid #EA580C; padding-left: 1rem; color: #4B5563; font-style: italic; background: #FFF7ED; padding: 0.8rem; margin: 1em 0; border-radius: 4px; }
+      /* Markdown Artifact Styling - Classic Premium Theme */
+      .markdown-prose { color: #1F2937; line-height: 1.8; font-size: 1rem; }
+      
+      /* Typography: Indigo Headers */
+      .markdown-prose h1, .markdown-prose h2, .markdown-prose h3, .markdown-prose h4 { 
+        color: #3730A3; /* Deep Indigo */
+        font-family: 'Merriweather', serif; 
+        margin-top: 1.8em; 
+        margin-bottom: 0.8em; 
+        line-height: 1.3;
+      }
+      .markdown-prose h1 { font-size: 1.8rem; font-weight: 900; letter-spacing: -0.02em; border-bottom: 2px solid #E0E7FF; padding-bottom: 0.75rem; }
+      .markdown-prose h2 { font-size: 1.4rem; font-weight: 700; }
+      .markdown-prose h3 { font-size: 1.2rem; font-weight: 700; }
+      
+      .markdown-prose p { margin-bottom: 1.2em; }
+      
+      /* Typography: Emerald Bold */
+      .markdown-prose strong { color: #065F46; font-weight: 700; } /* Dark Emerald */
+      
+      /* Typography: Vibrant Blue Links */
+      .markdown-prose a { color: #2563EB; text-decoration: none; font-weight: 500; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+      .markdown-prose a:hover { border-bottom-color: #2563EB; }
+      
+      .markdown-prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.2em; color: #374151; }
+      .markdown-prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1.2em; color: #374151; }
+      .markdown-prose li { margin-bottom: 0.5em; padding-left: 0.3em; }
+
+      /* Blockquotes: Soft Indigo Tint */
+      .markdown-prose blockquote { 
+        border-left: 4px solid #3730A3; 
+        padding-left: 1.25rem; 
+        color: #4338CA; /* Lighter Indigo text */
+        font-family: 'Merriweather', serif;
+        font-style: italic; 
+        background: #EEF2FF; /* Very light Indigo bg */
+        padding: 1.25rem; 
+        margin: 1.5em 0; 
+        border-radius: 8px;
+        box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+      }
       
       /* Code Blocks */
       .markdown-prose pre { 
-        background-color: #1a1a1a; 
-        color: #e5e5e5; 
-        padding: 1rem; 
-        border-radius: 0.5rem; 
+        background-color: #111827; /* Near Black */
+        color: #F9FAFB; 
+        padding: 1.25rem; 
+        border-radius: 0.75rem; 
         overflow-x: auto; 
         margin-bottom: 1.5em; 
-        font-family: monospace;
-        font-size: 0.85rem;
-        border: 1px solid #333;
+        font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        border: 1px solid #1F2937;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
       }
       .markdown-prose code { 
         background-color: #F3F4F6; 
         color: #BE185D; 
         padding: 0.2rem 0.4rem; 
         border-radius: 0.25rem; 
-        font-size: 0.85em; 
+        font-size: 0.9em; 
         font-family: monospace;
+        font-weight: 500;
       }
       .markdown-prose pre code { 
         background-color: transparent; 
         color: inherit; 
         padding: 0;
+        font-weight: 400;
       }
 
       /* Tables */
-      .markdown-prose table { width: 100%; border-collapse: collapse; margin-bottom: 1.5em; border: 1px solid #E5E7EB; }
-      .markdown-prose th { background-color: #F9FAFB; padding: 0.75rem; text-align: left; border-bottom: 1px solid #E5E7EB; font-weight: 600; }
-      .markdown-prose td { padding: 0.75rem; border-bottom: 1px solid #E5E7EB; vertical-align: top; }
+      .markdown-prose table { width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 1.5em; border: 1px solid #E5E7EB; border-radius: 8px; overflow: hidden; }
+      .markdown-prose th { background-color: #F3F4F6; padding: 1rem; text-align: left; border-bottom: 1px solid #E5E7EB; font-weight: 600; color: #111827; }
+      .markdown-prose td { padding: 1rem; border-bottom: 1px solid #E5E7EB; vertical-align: top; color: #4B5563; }
+      .markdown-prose tr:last-child td { border-bottom: none; }
       
       .scrollbar-hide::-webkit-scrollbar {
           display: none;

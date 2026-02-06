@@ -2,12 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ChatMessage } from '../types';
-import { Bot, User, FileIcon } from 'lucide-react';
+import { User, FileIcon } from 'lucide-react';
 
 interface ChatViewProps {
   messages: ChatMessage[];
   isLoading: boolean;
 }
+
+const AI_AVATAR_URL = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
 
 const ChatView: React.FC<ChatViewProps> = ({ messages, isLoading }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -24,10 +26,17 @@ const ChatView: React.FC<ChatViewProps> = ({ messages, isLoading }) => {
           className={`group flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
         >
           {/* Avatar */}
-          <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center shadow-sm
-            ${msg.role === 'model' ? 'bg-accent/10 text-accent border border-accent/20' : 'bg-gray-200 text-gray-600'}`}>
-            {msg.role === 'model' ? <Bot className="w-5 h-5" /> : <User className="w-5 h-5" />}
-          </div>
+          {msg.role === 'model' ? (
+             <img 
+               src={AI_AVATAR_URL}
+               alt="AI"
+               className="flex-shrink-0 w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"
+             />
+          ) : (
+             <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center shadow-inner border-2 border-gray-100">
+                <User className="w-5 h-5" />
+             </div>
+          )}
 
           {/* Message Content */}
           <div className={`flex-1 max-w-[85%] space-y-2`}>
@@ -48,16 +57,21 @@ const ChatView: React.FC<ChatViewProps> = ({ messages, isLoading }) => {
               </div>
             )}
 
-            {/* Text Bubble / Artifact */}
+            {/* Text Bubble / Artifact 
+                Updated for Classic Premium Theme: 
+                - White background
+                - Elegant subtle shadow
+                - Soft borders
+            */}
             <div className={`
               ${msg.role === 'user' 
-                ? 'bg-gray-100 text-gray-800 px-4 py-3 rounded-2xl rounded-tr-sm' 
-                : 'bg-white shadow-sm border border-gray-100 px-8 py-8 rounded-xl min-h-[100px] w-full artifact-container'}
+                ? 'bg-[#1F2937] text-white px-5 py-3 rounded-2xl rounded-tr-sm shadow-md' 
+                : 'bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05),0_2px_6px_-2px_rgba(0,0,0,0.01)] border border-stone-100 px-8 py-8 rounded-xl min-h-[100px] w-full artifact-container'}
             `}>
               {msg.role === 'user' ? (
-                <div className="whitespace-pre-wrap text-sm leading-relaxed">{msg.text}</div>
+                <div className="whitespace-pre-wrap text-sm leading-relaxed font-medium">{msg.text}</div>
               ) : (
-                <div className="markdown-prose text-gray-800">
+                <div className="markdown-prose">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {msg.text}
                   </ReactMarkdown>
@@ -65,7 +79,7 @@ const ChatView: React.FC<ChatViewProps> = ({ messages, isLoading }) => {
               )}
             </div>
             
-            <div className={`text-[10px] text-gray-300 font-medium uppercase tracking-wider ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+            <div className={`text-[10px] text-gray-400 font-bold uppercase tracking-widest ${msg.role === 'user' ? 'text-right' : 'text-left pl-2'}`}>
                {new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
             </div>
           </div>
@@ -74,14 +88,16 @@ const ChatView: React.FC<ChatViewProps> = ({ messages, isLoading }) => {
 
       {isLoading && (
         <div className="flex gap-4">
-          <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent/10 text-accent border border-accent/20 flex items-center justify-center">
-             <Bot className="w-5 h-5" />
-          </div>
-          <div className="bg-white shadow-sm border border-gray-100 px-8 py-6 rounded-xl w-full max-w-[85%]">
+          <img 
+               src={AI_AVATAR_URL}
+               alt="AI"
+               className="flex-shrink-0 w-10 h-10 rounded-full object-cover border-2 border-white shadow-md"
+             />
+          <div className="bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-stone-100 px-8 py-6 rounded-xl w-full max-w-[85%]">
              <div className="flex space-x-2">
-                <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce delay-0"></div>
-                <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce delay-150"></div>
-                <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce delay-300"></div>
+                <div className="w-2 h-2 bg-indigo-800 rounded-full animate-bounce delay-0"></div>
+                <div className="w-2 h-2 bg-indigo-800 rounded-full animate-bounce delay-150"></div>
+                <div className="w-2 h-2 bg-indigo-800 rounded-full animate-bounce delay-300"></div>
              </div>
           </div>
         </div>

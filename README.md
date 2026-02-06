@@ -1,34 +1,20 @@
-# Gemini Synapse: Your Professional Second Brain Assistant
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-![Google AI Studio Banner](https://raw.githubusercontent.com/google-gemini/ai-studio-samples/main/assets/banner.png)
+# Run and deploy your AI Studio app
 
-Gemini Synapse is a high-performance AI Workspace built for the Gemini 3 global hackathon. It combines multimodal intelligence with domain-specific AI agents to help you organize your life, work, and studies.
+This contains everything you need to run your app locally.
 
----
+View your app in AI Studio: https://ai.studio/apps/drive/1Jx7LsyQiiZjyPJo3tOkOiR4W2OgzzurY
 
-## 🚀 Key Features
-- **Multimodal Insights:** Analyze images, network diagrams, and documents (PDFs) instantly.
-- **Expert AI Agents:** Specialized assistants for Coding, Network Design, Business Strategy, Travel Planning, Health, and Study Schedules.
-- **Intelligent Organizer:** Automatically extracts actionable tasks, decisions, and insights from messy notes.
-- **Claude-inspired UI:** A clean, professional workspace featuring "Rich Artifacts" (formatted reports, tables, and code blocks).
-- **Large Context Support:** Maintains context over long conversations for deep analysis.
+## Run Locally
 
-## 🛠 Tech Stack
-- **AI Model:** Google Gemini 3 API
-- **Frontend:** React.js, TypeScript
-- **Styling:** Tailwind CSS
-- **Development Environment:** Google AI Studio
+**Prerequisites:**  Node.js
 
----
 
-## 📖 Run and deploy your AI Studio app
-This repository contains everything you need to run your app locally and explore its features.
-
-**View your app in AI Studio:** [Open in AI Studio][https://ai.studio/apps/drive/1Jx7LsyQiiZjyPJo3tOkOiR4W2OgzzurY?fullscreenApplet=true]
-
-### Run Locally
-**Prerequisites:** Node.js
-
-1. **Install dependencies:**
-   ```bash
-   npm install
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
